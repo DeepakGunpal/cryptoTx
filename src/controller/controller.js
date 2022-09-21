@@ -1,5 +1,6 @@
-const tx = require('../model/model');
+const tx = require('../model/txModel');
 const axios = require('axios');
+const balAndPriceModel = require('../model/balAndPriceModel');
 
 //todo Task 1
 const transaction = async (req, res) => {
@@ -68,12 +69,12 @@ const ethereumPriceAndBalance = async (req, res) => {
                 res.status(500).send({ status: false, message: err.message });
             });
 
-
-        const currBalAndPrice = {
+        const data = {
             balance: etherBalance.data.result,
             price: etherPrice.data.ethereum.inr
         }
 
+        const currBalAndPrice = await balAndPriceModel.create(data);
         res.status(201).send({ status: true, data: currBalAndPrice });
     } catch (error) {
 
